@@ -1,12 +1,12 @@
-# XRIO Kernel
+# xrio Kernel
 
-**XRIO** (Xtensible Rust Infrastructure for Objectification) is a geometry kernel for CAD and modeling systems, written in Rust and originally forked from [Fornjot](https://github.com/hannobraun/fornjot). XRIO builds on Fornjot's solid B-Rep foundation and takes it further by aiming at extensible, programmatic, and web-oriented applications.
+**xrio** (Xtensible Rust Infrastructure for Objectification) is a geometry kernel for CAD and modeling systems, written in Rust and originally forked from [Fornjot](https://github.com/hannobraun/fornjot). xrio builds on Fornjot's solid B-Rep foundation and takes it further by aiming at extensible, programmatic, and web-oriented applications.
 
 ---
 
 ## Project Scope
 
-XRIO continues Fornjot’s mission of creating a reliable and modular boundary representation (B-Rep) CAD kernel, while introducing:
+xrio continues Fornjot’s mission of creating a reliable and modular boundary representation (B-Rep) CAD kernel, while introducing:
 
 - Broader interoperability across 3D ecosystems (CAD, GIS, XR, fabrication)
 - WebAssembly compatibility for browser-native CAD workflows
@@ -17,13 +17,13 @@ XRIO continues Fornjot’s mission of creating a reliable and modular boundary r
 
 ## Status
 
-XRIO is an early-stage geometry kernel. Core topological and geometric abstractions are in active design. This project is in **exploration phase**, ideal for contributors passionate about foundational CAD, Rust, or geometric computing.
+xrio is an early-stage geometry kernel. Core topological and geometric abstractions are in active design. This project is in **exploration phase**, ideal for contributors passionate about foundational CAD, Rust, or geometric computing.
 
 ---
 
 ## Contributing
 
-XRIO welcomes contributors interested in:
+xrio welcomes contributors interested in:
 
 * Geometric kernel architecture
 * Procedural and constraint-based modeling
@@ -37,10 +37,10 @@ Start by reviewing open issues or suggesting improvements via discussion or pull
 
 ## License
 
-XRIO is licensed under the Zero Clause BSD License ([0BSD](https://opensource.org/licenses/0BSD)), which permits use for any purpose without restriction or warranty.
+xrio is licensed under the Zero Clause BSD License ([0BSD](https://opensource.org/licenses/0BSD)), which permits use for any purpose without restriction or warranty.
 
 ---
 
 ## Acknowledgments
 
-XRIO is built on the pioneering work of [Fornjot](https://github.com/hannobraun/fornjot), authored by [@hannobraun](https://github.com/hannobraun). We thank the Fornjot community for its openness and innovation in the Rust-based CAD space.
+xrio is built on the pioneering work of [Fornjot](https://github.com/hannobraun/fornjot), authored by [@hannobraun](https://github.com/hannobraun). We thank the Fornjot community for its openness and innovation in the Rust-based CAD space.
