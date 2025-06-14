@@ -1,108 +1,46 @@
-# Fornjot
+# XRIO Kernel
 
-[**Blog**](https://www.fornjot.app/blog/) | [**Community**](https://www.fornjot.app/community/) | [**Contribution Guide**](CONTRIBUTING.md)
+**XRIO** (Xtensible Rust Infrastructure for Objectification) is a geometry kernel for CAD and modeling systems, written in Rust and originally forked from [Fornjot](https://github.com/hannobraun/fornjot). XRIO builds on Fornjot's solid B-Rep foundation and takes it further by aiming at extensible, programmatic, and web-oriented applications.
 
-## About
+---
 
-Fornjot is an **early-stage CAD kernel**, using **boundary representation (b-rep)**, written in the Rust programming language.
+## Project Scope
 
-As a CAD kernel, the project's main goal is to provide **a solid foundation for developers to build on top of**, whether for special purpose tooling, third-party libraries for extending Fornjot's feature set, or full-featured CAD applications.
+XRIO continues Fornjot’s mission of creating a reliable and modular boundary representation (B-Rep) CAD kernel, while introducing:
 
-In doing so, Fornjot follows these principles:
+- Broader interoperability across 3D ecosystems (CAD, GIS, XR, fabrication)
+- WebAssembly compatibility for browser-native CAD workflows
+- High modularity for programmatic geometry workflows
+- Infrastructure for objectification—serialization, provenance, constraints, and editing
 
-- Focus on **mechanical CAD applications**, like 3D printing, machining, woodworking; over other use cases such as architecture or electronics.
-- Favor **reliability over features**. Anything you can do should either work as expected, or result in a clear and actionable error.
-- Maintain **a friendly API for directly defining models** in Rust. This means code-first CAD modeling (or Code-CAD) is natively supported.
-- Support **code-first CAD modeling in other languages**, by enabling third-party APIs.
-
-Fornjot is still in development and doesn't always live up to these ambitions. None the less, these are the priorities the project follows.
-
-For more information, [please check out the website](https://www.fornjot.app/).
-
-
-## Sponsors
-
-Fornjot is supported by [**@reivilibre**](https://github.com/reivilibre), [**@thestig4242**](https://github.com/thestig4242), [**@thomasgarrison**](https://github.com/thomasgarrison), [**@seanjensengrey**](https://github.com/seanjensengrey), [**@lthiery**](https://github.com/lthiery), [**@ahdinosaur**](https://github.com/ahdinosaur), [**@martindederer**](https://github.com/martindederer), [**@sucaba**](https://github.com/sucaba), [**@MitchellHansen**](https://github.com/MitchellHansen), [**@Rahix**](https://github.com/Rahix), [**@JanBerktold**](https://github.com/JanBerktold), [**@darwin**](https://github.com/darwin), [**@nullstyle**](https://github.com/nullstyle), [**@HalfVoxel**](https://github.com/HalfVoxel), [**@jessebraham**](https://github.com/jessebraham), [**@jminer**](https://github.com/jminer), [**@U007D**](https://github.com/U007D), [**@guillaumechauvat**](https://github.com/guillaumechauvat), [**@mayfieldiv**](https://github.com/mayfieldiv), [**@bglw**](https://github.com/bglw), [**@refarb**](https://github.com/refarb), [**@hansihe**](https://github.com/hansihe), [**@romixlab**](https://github.com/romixlab), [**@justinmimbs**](https://github.com/justinmimbs), [**@yikesable**](https://github.com/yikesable), [**@hrgdavor**](https://github.com/hrgdavor), [**@ironchief**](https://github.com/ironchief), [**@kingsmountainlabs**](https://github.com/kingsmountainlabs), [**@epyintheshell**](https://github.com/epyintheshell), [**@jneem**](https://github.com/jneem), [**@starthal**](https://github.com/starthal), and [my other awesome sponsors](https://github.com/sponsors/hannobraun). Thank you!
-
-**Please consider [supporting me too](https://github.com/sponsors/hannobraun), to help make Fornjot sustainable long-term.**
-
-
-## Table of Contents
-
-- [**Status**](#status)
-- [**Overview**](#overview)
-- [**Usage**](#usage)
-- [**Community**](#community)
-- [**Get Involved**](#get-involved)
-- [**License**](#license)
-
+---
 
 ## Status
 
-Fornjot is usable for simple models (see [`models/` directory](models)), but currently lacks the features for anything more advanced. Work to change that is underway.
+XRIO is an early-stage geometry kernel. Core topological and geometric abstractions are in active design. This project is in **exploration phase**, ideal for contributors passionate about foundational CAD, Rust, or geometric computing.
 
-Despite this, there are some experimental projects that are build on top of Fornjot:
+---
 
-- [CommandCAD](https://github.com/IamTheCarl/CommandCAD)
-- [`fj-text`](https://github.com/samgoldman/fj-text)
-- [`bevy_mod_fornjot`](https://github.com/TotalKrill/bevy_mod_fornjot)
+## Contributing
 
+XRIO welcomes contributors interested in:
 
-## Overview
+* Geometric kernel architecture
+* Procedural and constraint-based modeling
+* CAD file format support
+* Mathematical and spatial computation
+* Real-time rendering and WASM deployment
 
-Fornjot features a modular architecture, allowing you to pick and choose which parts of it you want to use. It is made up of the following libraries:
+Start by reviewing open issues or suggesting improvements via discussion or pull request.
 
-- [`fj`]: All-in-one API that re-exports all of the following crates.
-- [`fj-math`]: Math primitives used by the rest of Fornjot.
-- [`fj-interop`]: Basic types that allow other crates to interoperate, without depending on each other.
-- [`fj-core`]: Core primitives and code operating on those primitives.
-- [`fj-export`]: Exports Fornjot models to external data formats.
-- [`fj-viewer`]: Displays Fornjot models.
-- [`fj-window`]: Simple windowing abstraction for use with `fj-viewer`.
-
-[`fj`]: https://crates.io/crates/fj
-[`fj-core`]: https://crates.io/crates/fj-core
-[`fj-export`]: https://crates.io/crates/fj-export
-[`fj-interop`]: https://crates.io/crates/fj-interop
-[`fj-math`]: https://crates.io/crates/fj-math
-[`fj-viewer`]: https://crates.io/crates/fj-viewer
-[`fj-window`]: https://crates.io/crates/fj-window
-
-
-## Usage
-
-Fornjot is a set of Rust libraries (see list above). The definitive documentation on how to use those is their reference documentation. The `crates.io` pages of each library (see list above) link to those.
-
-If you want to use Fornjot to create a specific model in Rust, the best starting point are the [example models](models/) in this repository:
-
-- To display a model, run `cargo run -p cuboid` (replace `cuboid` with name of model you want to display).
-- To export a model, run `cargo run -p cuboid -- --export model.3mf` (replace `cuboid` with name of model you want to export; optionally replace `3mf` with another supported file format).
-- To see full set of CLI options, run `cargo run -p cuboid -- --help` (all models have the same CLI interface, so this shouldn't differ much between them).
-
-
-## Community
-
-If you are interested in Fornjot, please consider joining the community. We'd love to have you!
-
-Please check out [the community page on the website](https://www.fornjot.app/community/) for information on where to find us!
-
-
-## Get Involved
-
-If you are interested in helping out, just fork one of the GitHub repositories and submit a pull request:
-
-- [Main Fornjot repository](https://github.com/hannobraun/Fornjot)
-- [Website repository](https://github.com/hannobraun/www.fornjot.app)
-
-If you don't know what to work on, check out the [`good first issues`](https://github.com/hannobraun/Fornjot/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22). If you need some more guidance, check out the [contribution guide](CONTRIBUTING.md), [or just ask](https://www.fornjot.app/community/)!
-
+---
 
 ## License
 
-This project is open source, licensed under the terms of the [Zero Clause BSD License] (0BSD, for short). This basically means you can do anything with it, without any restrictions, but you can't hold the authors liable for problems.
+XRIO is licensed under the Zero Clause BSD License ([0BSD](https://opensource.org/licenses/0BSD)), which permits use for any purpose without restriction or warranty.
 
-See [LICENSE.md] for full details.
+---
 
-[`fj`]: https://crates.io/crates/fj
-[Zero Clause BSD License]: https://opensource.org/licenses/0BSD
-[LICENSE.md]: LICENSE.md
+## Acknowledgments
+
+XRIO is built on the pioneering work of [Fornjot](https://github.com/hannobraun/fornjot), authored by [@hannobraun](https://github.com/hannobraun). We thank the Fornjot community for its openness and innovation in the Rust-based CAD space.
