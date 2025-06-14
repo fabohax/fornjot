@@ -14,7 +14,7 @@ use crate::{Args, export, viewer};
 
 /// An instance of Fornjot
 ///
-/// This is the main entry point into the Fornjot API
+/// This is the main entry point into the Fornjot API.
 #[derive(Default)]
 pub struct Instance {
     /// The instance of the Fornjot core
@@ -41,17 +41,29 @@ impl Instance {
     ///
     /// This function is used by Fornjot's own testing infrastructure, but is
     /// useful beyond that, when using Fornjot directly to define a model.
+    ///
+    /// # Errors
+    ///
+    /// Returns an error if logger setup fails, validation fails, tolerance is invalid,
+    /// model is empty, or export/display fails.
     pub fn process_model<M>(&mut self, model: &M) -> Result
     where
         for<'r> (&'r M, Tolerance): Triangulate,
         for<'r> &'r M: BoundingVolume<3>,
     {
-        tracing_subscriber::registry()
-            .with(tracing_subscriber::fmt::layer())
-            .with(tracing_subscriber::EnvFilter::from_default_env())
-            .init();
-
         let args = Args::parse();
+        self.process_model_with_args(model, args)
+    }
+
+    /// Like [`process_model`], but allows passing CLI arguments directly.
+    ///
+    /// This is useful for testing and programmatic use.
+    pub fn process_model_with_args<M>(&mut self, model: &M, args: Args) -> Result
+    where
+        for<'r> (&'r M, Tolerance): Triangulate,
+        for<'r> &'r M: BoundingVolume<3>,
+    {
+        self.init_logger()?;
 
         if !args.ignore_validation {
             self.core.layers.validation.take_errors()?;
@@ -62,24 +74,7 @@ impl Instance {
             max: Point::origin(),
         });
 
-        let tolerance = match args.tolerance {
-            None => {
-                // Compute a reasonable default for the tolerance value. To do
-                // this, we just look at the smallest non-zero extent of the
-                // bounding box and divide that by some value.
-
-                let mut min_extent = Scalar::MAX;
-                for extent in aabb.size().components {
-                    if extent > Scalar::ZERO && extent < min_extent {
-                        min_extent = extent;
-                    }
-                }
-
-                let tolerance = min_extent / Scalar::from_f64(1000.);
-                Tolerance::from_scalar(tolerance)?
-            }
-            Some(user_defined_tolerance) => user_defined_tolerance,
-        };
+        let tolerance = self.compute_tolerance(&aabb, args.tolerance)?;
 
         let tri_mesh = (model, tolerance).triangulate(&mut self.core);
 
@@ -93,6 +88,44 @@ impl Instance {
         })?;
 
         Ok(())
+    }
+
+    /// Initialize the logger, if not already set.
+    fn init_logger(&self) -> std::result::Result<(), tracing::subscriber::SetGlobalDefaultError> {
+        // try_init returns an error if the logger is already set, which is fine in tests.
+        let _ = tracing_subscriber::registry()
+            .with(tracing_subscriber::fmt::layer())
+            .with(tracing_subscriber::EnvFilter::from_default_env())
+            .try_init();
+        Ok(())
+    }
+
+    /// Compute the tolerance to use for triangulation.
+    ///
+    /// Returns an error if the bounding box is degenerate (all extents zero).
+    fn compute_tolerance(
+        &self,
+        aabb: &Aabb<3>,
+        user_defined: Option<Tolerance>,
+    ) -> std::result::Result<Tolerance, Error> {
+        match user_defined {
+            Some(tol) => Ok(tol),
+            None => {
+                let mut min_extent = Scalar::MAX;
+                let mut found_nonzero = false;
+                for extent in aabb.size().components {
+                    if extent > Scalar::ZERO && extent < min_extent {
+                        min_extent = extent;
+                        found_nonzero = true;
+                    }
+                }
+                if !found_nonzero {
+                    return Err(Error::EmptyModel);
+                }
+                let tolerance = min_extent / Scalar::from_f64(1000.);
+                Ok(Tolerance::from_scalar(tolerance)?)
+            }
+        }
     }
 }
 
@@ -121,6 +154,10 @@ pub enum Error {
     /// Unhandled validation errors
     #[error(transparent)]
     Validation(#[from] ValidationErrors),
+
+    /// The model is empty or has zero size
+    #[error("The model is empty or has zero size; cannot compute tolerance")]
+    EmptyModel,
 }
 
 impl fmt::Debug for Error {
